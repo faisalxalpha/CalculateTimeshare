@@ -1,118 +1,122 @@
-import { Link, useLocation } from "wouter";
-import { Button } from "@/components/ui/button";
-import { Menu, X, Calculator, FileText, LogOut, Home, Info, Phone, Shield } from "lucide-react";
-import { useState } from "react";
+
+import { useState, useEffect } from "react";
+import { useLocation, Link } from "wouter";
+import { Button, buttonVariants } from "@/components/ui/button";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Menu, X, Sun, Moon } from "lucide-react";
+import { cn } from "@/lib/utils";
+
+const mainNavLinks = [
+  { href: "/cost-calculator", label: "Cost Calculator" },
+  { href: "/maintenance-calculator", label: "Maintenance Calculator" },
+  { href: "/exit-options", label: "Exit Options" },
+  { href: "/blog", label: "Blog" },
+  { href: "/about", label: "About" },
+];
+
+const mobileNavLinks = [...mainNavLinks, { href: "/contact", label: "Contact Us" }];
 
 export function Navigation() {
+  const [isOpen, setIsOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(false);
   const [location] = useLocation();
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const navItems = [
-    { path: "/", label: "Home", icon: Home },
-    { path: "/cost-calculator", label: "Cost Calculator", icon: Calculator },
-    { path: "/maintenance-calculator", label: "Maintenance Calculator", icon: Calculator },
-    { path: "/exit-options", label: "Exit Options", icon: LogOut },
-    { path: "/blog", label: "Blog", icon: FileText },
-    { path: "/about", label: "About", icon: Info },
-    { path: "/contact", label: "Contact", icon: Phone },
-  ];
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 0);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const darkMode = localStorage.getItem("darkMode") === "true";
+    setIsDarkMode(darkMode);
+    document.documentElement.classList.toggle("dark", darkMode);
+  }, []);
+
+  const toggleDarkMode = () => {
+    const newMode = !isDarkMode;
+    setIsDarkMode(newMode);
+    localStorage.setItem("darkMode", newMode.toString());
+    document.documentElement.classList.toggle("dark", newMode);
+  };
 
   return (
-    <>
-      <header className="sticky top-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            {/* Logo */}
-            <Link href="/" className="flex items-center space-x-2 hover-elevate active-elevate-2 rounded-md px-3 py-2">
-              <Calculator className="h-6 w-6 text-primary" />
-              <span className="text-xl font-sans font-bold">CalculateTimeshare</span>
-            </Link>
-
-            {/* Desktop Navigation */}
-            <nav className="hidden md:flex items-center space-x-1">
-              {navItems.map((item) => (
-                <Button
-                  key={item.path}
-                  variant={location === item.path ? "secondary" : "ghost"}
-                  size="sm"
-                  data-testid={`nav-link-${item.label.toLowerCase().replace(/\s+/g, '-')}`}
-                  asChild
-                >
-                  <Link href={item.path}>
-                    {item.label}
-                  </Link>
-                </Button>
-              ))}
-            </nav>
-
-            {/* CTA Button */}
-            <div className="hidden md:block">
-              <Button variant="default" data-testid="button-get-exit-quote" asChild>
-                <Link href="/cost-calculator">
-                  Get Exit Quote
-                </Link>
-              </Button>
-            </div>
-
-            {/* Mobile menu button */}
-            <Button
-              variant="ghost"
-              size="icon"
-              className="md:hidden"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              data-testid="button-mobile-menu-toggle"
-            >
-              {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-            </Button>
-          </div>
+    <header
+      className={cn(
+        "sticky top-0 z-50 w-full transition-all duration-300",
+        isScrolled ? "bg-background/80 backdrop-blur-sm" : "bg-transparent"
+      )}
+    >
+      <div className="container flex h-20 items-center justify-between md:grid md:grid-cols-3">
+        {/* Logo */}
+        <div className="flex items-center md:justify-start">
+          <Link href="/" className="flex items-center">
+            <img src="/favicon.png" alt="TUG Logo" className="h-8" />
+          </Link>
         </div>
 
-        {/* Mobile Menu */}
-        {mobileMenuOpen && (
-          <div className="md:hidden border-t bg-background">
-            <div className="px-2 pt-2 pb-3 space-y-1">
-              {navItems.map((item) => {
-                const Icon = item.icon;
-                return (
-                  <Button
-                    key={item.path}
-                    variant={location === item.path ? "secondary" : "ghost"}
-                    className="w-full justify-start"
-                    data-testid={`mobile-nav-link-${item.label.toLowerCase().replace(/\s+/g, '-')}`}
-                    asChild
-                  >
-                    <Link href={item.path} onClick={() => setMobileMenuOpen(false)}>
-                      <Icon className="h-4 w-4 mr-2" />
-                      {item.label}
-                    </Link>
-                  </Button>
-                );
-              })}
-              <Button variant="default" className="w-full" data-testid="mobile-button-get-exit-quote" asChild>
-                <Link href="/cost-calculator" onClick={() => setMobileMenuOpen(false)}>
-                  Get Exit Quote
-                </Link>
-              </Button>
-            </div>
-          </div>
-        )}
-      </header>
+        {/* Desktop Navigation */}
+        <nav className="hidden items-center justify-center space-x-4 md:flex">
+          {mainNavLinks.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className={cn(
+                buttonVariants({ variant: "ghost" }),
+                "text-sm font-medium",
+                location === link.href && "font-bold"
+              )}
+            >
+              {link.label}
+            </Link>
+          ))}
+        </nav>
 
-      {/* Sticky CTA Button - Fixed bottom-right on scroll */}
-      <div className="fixed bottom-8 right-8 z-40 hidden lg:block">
-        <Button 
-          size="lg" 
-          variant="default"
-          className="shadow-2xl animate-pulse hover:animate-none"
-          data-testid="button-floating-cta"
-          asChild
-        >
-          <Link href="/cost-calculator">
-            <Calculator className="h-5 w-5 mr-2" />
-            Get Free Quote
+        {/* Action Buttons & Mobile Menu */}
+        <div className="flex items-center justify-end space-x-2">
+          <Link
+            href="/contact"
+            className={cn(
+              buttonVariants({ variant: "default", size: "sm" }),
+              "hidden md:inline-flex"
+            )}
+          >
+            Contact Us
           </Link>
-        </Button>
+          <Button variant="ghost" size="icon" onClick={toggleDarkMode}>
+            {isDarkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+          </Button>
+          
+          {/* Mobile Menu */}
+          <Sheet open={isOpen} onOpenChange={setIsOpen}>
+            <SheetTrigger asChild>
+              <Button variant="outline" size="icon" className="md:hidden">
+                {isOpen ? <X /> : <Menu />}
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="right">
+              <div className="flex flex-col space-y-4 pt-6">
+                {mobileNavLinks.map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className={cn(
+                      "text-lg font-medium",
+                      location === link.href && "font-bold"
+                    )}
+                    onClick={() => setIsOpen(false)}
+                  >
+                    {link.label}
+                  </Link>
+                ))}
+              </div>
+            </SheetContent>
+          </Sheet>
+        </div>
       </div>
-    </>
+    </header>
   );
 }

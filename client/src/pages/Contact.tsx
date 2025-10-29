@@ -7,7 +7,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useMutation } from "@tanstack/react-query";
-import { apiRequest } from "@/lib/queryClient";
+import { apiClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { Phone, Mail, MapPin, Clock } from "lucide-react";
 import { SEO } from "@/components/SEO";
@@ -36,7 +36,7 @@ export default function Contact() {
 
   const submitContact = useMutation({
     mutationFn: async (data: FormData) => {
-      return await apiRequest("POST", "/api/leads", {
+      return await apiClient.post("/api/leads", {
         ...data,
         source: "contact-form",
       });

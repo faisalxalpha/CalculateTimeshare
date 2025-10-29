@@ -66,14 +66,24 @@ app.use((req, res, next) => {
     serveStatic(app);
   }
 
+  function getArg(argName: string): string | undefined {
+    const argIndex = process.argv.indexOf(argName);
+    if (argIndex > -1) {
+      return process.argv[argIndex + 1];
+    }
+    return undefined;
+  }
+
   // ALWAYS serve the app on the port specified in the environment variable PORT
   // Other ports are firewalled. Default to 5000 if not specified.
   // this serves both the API and the client.
   // It is the only port that is not firewalled.
-  const port = parseInt(process.env.PORT || '5000', 10);
+  const port = parseInt(getArg('--port') || process.env.PORT || '5000', 10);
+  const host = getArg('--host') || '0.0.0.0';
+
   server.listen({
     port,
-    host: "0.0.0.0",
+    host,
     reusePort: true,
   }, () => {
     log(`serving on port ${port}`);

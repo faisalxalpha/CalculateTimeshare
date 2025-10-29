@@ -1,3 +1,4 @@
+
 import { Switch, Route } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
@@ -6,6 +7,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
 import { CookieConsent } from "@/components/CookieConsent";
+import { ProtectedRoute } from "@/components/ProtectedRoute";
 
 // Pages
 import Home from "@/pages/Home";
@@ -21,7 +23,12 @@ import Privacy from "@/pages/Privacy";
 import Terms from "@/pages/Terms";
 import Disclaimer from "@/pages/Disclaimer";
 import AdminSettings from "@/pages/AdminSettings";
+import IconSettings from "@/pages/IconSettings";
+import SeoSettings from "@/pages/SeoSettings";
+import SocialMediaSettings from "@/pages/SocialMediaSettings";
 import NotFound from "@/pages/not-found";
+import { LoginPage } from "@/pages/LoginPage";
+import { AdminDashboard } from "@/pages/AdminDashboard";
 
 function Router() {
   return (
@@ -37,8 +44,13 @@ function Router() {
       <Route path="/privacy" component={Privacy} />
       <Route path="/terms" component={Terms} />
       <Route path="/disclaimer" component={Disclaimer} />
-      <Route path="/admin/blog" component={BlogAdmin} />
-      <Route path="/admin/settings" component={AdminSettings} />
+      <Route path="/login" component={LoginPage} />
+      <ProtectedRoute path="/admin" component={AdminDashboard} />
+      <ProtectedRoute path="/admin/blog" component={BlogAdmin} />
+      <ProtectedRoute path="/admin/settings" component={AdminSettings} />
+      <ProtectedRoute path="/admin/icon-settings" component={IconSettings} />
+      <ProtectedRoute path="/admin/seo-settings" component={SeoSettings} />
+      <ProtectedRoute path="/admin/social-media-settings" component={SocialMediaSettings} />
       <Route component={NotFound} />
     </Switch>
   );

@@ -8,7 +8,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useMutation } from "@tanstack/react-query";
-import { apiRequest } from "@/lib/queryClient";
+import { apiClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { Calculator, DollarSign, TrendingUp, AlertCircle } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -57,7 +57,7 @@ export default function CostCalculator() {
 
   const submitLead = useMutation({
     mutationFn: async (data: FormData & { calculatorResults: string }) => {
-      return await apiRequest("POST", "/api/leads", {
+      return await apiClient.post("/api/leads", {
         ...data,
         source: "cost-calculator",
       });

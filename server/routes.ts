@@ -1,8 +1,10 @@
+
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertBlogPostSchema, insertLeadSchema } from "@shared/schema";
 import { getUncachableResendClient } from "./resend-client";
+import { adminRouter } from "./routers/admin_router";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // ============ BLOG ROUTES ============
@@ -153,35 +155,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // ============ ADMIN SETTINGS ROUTES ============
-  
-  // Get all settings
-  app.get("/api/admin/settings", async (req, res) => {
-    try {
-      const settings = await storage.getSettings();
-      res.json(settings);
-    } catch (error) {
-      console.error("Error fetching settings:", error);
-      res.status(500).json({ error: "Failed to fetch settings" });
-    }
-  });
-
-  // Update settings
-  app.put("/api/admin/settings", async (req, res) => {
-    try {
-      const { webhookUrl } = req.body;
-      
-      if (webhookUrl !== undefined) {
-        await storage.setSetting("WEBHOOK_URL", webhookUrl);
-      }
-      
-      const settings = await storage.getSettings();
-      res.json(settings);
-    } catch (error) {
-      console.error("Error updating settings:", error);
-      res.status(500).json({ error: "Failed to update settings" });
-    }
-  });
+  app.use('/api/admin', adminRouter);
 
   // ============ SEO ROUTES ============
   

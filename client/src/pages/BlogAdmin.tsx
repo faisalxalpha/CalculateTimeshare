@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { queryClient, apiRequest } from "@/lib/queryClient";
+import { queryClient, apiClient } from "@/lib/queryClient";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -35,7 +35,7 @@ export default function BlogAdmin() {
 
   const deleteMutation = useMutation({
     mutationFn: async (id: string) => {
-      return await apiRequest("DELETE", `/api/blog/${id}`, null);
+      return await apiClient.delete(`/api/blog/${id}`);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/blog"] });
@@ -171,9 +171,9 @@ function BlogPostForm({ post, onClose }: { post: BlogPost | null; onClose: () =>
   const saveMutation = useMutation({
     mutationFn: async (data: typeof formData) => {
       if (post) {
-        return await apiRequest("PUT", `/api/blog/${post.id}`, data);
+        return await apiClient.put(`/api/blog/${post.id}`, data);
       } else {
-        return await apiRequest("POST", "/api/blog", data);
+        return await apiClient.post("/api/blog", data);
       }
     },
     onSuccess: () => {

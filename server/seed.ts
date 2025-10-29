@@ -1,5 +1,6 @@
 import { db } from "./db";
 import { blogPosts } from "@shared/schema";
+import { randomUUID } from "crypto";
 
 // Image paths (these will be served via Vite's asset handling)
 const calculatorImage = "/attached_assets/generated_images/Calculator_with_timeshare_documents_d5b6fc64.png";
@@ -224,7 +225,7 @@ async function seed() {
 
   try {
     for (const post of posts) {
-      await db.insert(blogPosts).values(post);
+      await db.insert(blogPosts).values({ ...post, id: randomUUID() });
       console.log(`✓ Created blog post: ${post.title}`);
     }
     

@@ -1,11 +1,11 @@
 import { sql } from "drizzle-orm";
-import { pgTable, text, varchar, integer, timestamp, boolean } from "drizzle-orm/pg-core";
+import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
 // Blog Posts Table
-export const blogPosts = pgTable("blog_posts", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+export const blogPosts = sqliteTable("blog_posts", {
+  id: text("id").primaryKey(),
   title: text("title").notNull(),
   slug: text("slug").notNull().unique(),
   excerpt: text("excerpt").notNull(),
@@ -14,8 +14,8 @@ export const blogPosts = pgTable("blog_posts", {
   category: text("category").notNull(), // Exit Tips, Owner Stories, News, Guides
   metaTitle: text("meta_title"),
   metaDescription: text("meta_description"),
-  publishedAt: timestamp("published_at").defaultNow(),
-  updatedAt: timestamp("updated_at").defaultNow(),
+  publishedAt: integer("published_at", { mode: 'timestamp' }).default(sql`(strftime('%s', 'now'))`),
+  updatedAt: integer("updated_at", { mode: 'timestamp' }).default(sql`(strftime('%s', 'now'))`),
 });
 
 export const insertBlogPostSchema = createInsertSchema(blogPosts).omit({
@@ -28,8 +28,8 @@ export type InsertBlogPost = z.infer<typeof insertBlogPostSchema>;
 export type BlogPost = typeof blogPosts.$inferSelect;
 
 // Leads Table
-export const leads = pgTable("leads", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+export const leads = sqliteTable("leads", {
+  id: text("id").primaryKey(),
   source: text("source").notNull(), // "cost-calculator", "maintenance-calculator", "contact-form"
   resortName: text("resort_name"),
   annualMaintenanceFee: integer("annual_maintenance_fee"),
@@ -41,7 +41,7 @@ export const leads = pgTable("leads", {
   phone: text("phone"),
   message: text("message"),
   calculatorResults: text("calculator_results"), // JSON string of calculation results
-  createdAt: timestamp("created_at").defaultNow(),
+  createdAt: integer("created_at", { mode: 'timestamp' }).default(sql`(strftime('%s', 'now'))`),
 });
 
 export const insertLeadSchema = createInsertSchema(leads).omit({
@@ -53,11 +53,11 @@ export type InsertLead = z.infer<typeof insertLeadSchema>;
 export type Lead = typeof leads.$inferSelect;
 
 // Admin Settings Table
-export const adminSettings = pgTable("admin_settings", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+export const adminSettings = sqliteTable("admin_settings", {
+  id: text("id").primaryKey(),
   key: text("key").notNull().unique(),
   value: text("value").notNull(),
-  updatedAt: timestamp("updated_at").defaultNow(),
+  updatedAt: integer("updated_at", { mode: 'timestamp' }).default(sql`(strftime('%s', 'now'))`),
 });
 
 export const insertAdminSettingSchema = createInsertSchema(adminSettings).omit({
