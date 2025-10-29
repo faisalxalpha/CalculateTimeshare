@@ -1,0 +1,148 @@
+Develop a complete, SEO-optimized website for CalculateTimeshare.com that educates users about timeshare costs, provides two calculators (Cost & Exit Calculator + Maintenance Fee Calculator), captures organic leads, and sends those leads to both email and webhook endpoints.
+
+🏗️ Functional Requirements
+1. Timeshare Cost & Exit Calculator (Lead Capture)
+
+Input fields:
+
+Resort Name
+
+Annual Maintenance Fee ($)
+
+Purchase Price ($)
+
+Years Owned
+
+Location (State/Country dropdown)
+
+Contact Name, Email, Phone
+
+On “Calculate”:
+
+Display estimated lifetime cost
+
+Suggest exit options (“Sell”, “Exit Service”, “Donation”)
+
+CTA: “Request Your Exit Quote”
+
+Data Handling:
+
+On submit, send all data to admin email and configured webhook URL.
+
+Store in lightweight DB (Google Sheet / Airtable / Supabase).
+
+Optionally tag leads by source (“Calculator”).
+
+2. 🔢 Maintenance Fee Calculator (Live Projection Mode)
+
+Purpose: Let users project their maintenance fee growth over time and compare monthly vs. annual costs.
+
+Layout: Two modes — Monthly / Annual, with switch toggle.
+
+Inputs:
+
+Current Maintenance (per year) — default 1000
+
+Mortgage (per year, cap 10 yrs) — default 1000
+
+Annual % Increase — slider (0%, 5%, 10%, 15%, 20%)
+
+Projection Years — numeric input (default 30)
+
+Outputs (live updating):
+
+First Yearly Cost
+
+Cumulative Cost
+
+30-Year Cost of Ownership
+
+Detailed Table:
+
+5-Year Maintenance / Cumulative
+
+10-Year Maintenance / Cumulative
+
+20-Year Maintenance / Cumulative
+
+30-Year Maintenance / Cumulative
+
+Notes:
+
+Show “Estimates only. Adjust inputs to see results update in real time.”
+
+Auto-updates results instantly as users type.
+
+Include animated line chart for visual projection.
+
+Optional “Email my results” CTA (captures lead and sends via webhook).
+
+3. Blog System (Admin Access)
+
+Add/Edit/Delete posts with title, image, content, meta tags.
+
+Categories: Exit Tips, Owner Stories, News, Guides.
+
+Auto-create sitemap.xml and RSS feed for SEO.
+
+Markdown or WYSIWYG editor.
+
+4. Website Pages
+
+Home: Hero (calculator CTA), value proposition, testimonials, FAQs.
+
+Calculator: Dedicated full-page for cost + exit calculator.
+
+Maintenance Fee Calculator: Interactive live-projection tool.
+
+Exit Options: Explain solutions (exit companies, legal paths, resale).
+
+Blog: SEO-friendly layout with sidebar categories.
+
+About Us: Brand mission, trust badges, contact CTA.
+
+Contact: Lead form + map + call/email buttons.
+
+Legal: Privacy Policy, Terms, Disclaimer, Sitemap.
+
+5. SEO / AEO / GEO / LLM Optimization
+
+Schema: FAQPage, Article, WebSite, BreadcrumbList, LocalBusiness.
+
+AEO: Include question-based headers (“How do I calculate timeshare maintenance fees?”).
+
+GEO SEO: Localized landing pages for major U.S. states (FL, NV, HI, CA).
+
+LLM SEO:
+
+Write clear factual copy in short paragraphs with headings.
+
+Use semantic HTML for structured embedding.
+
+Include Q&A blocks, checklists, and summaries.
+
+Auto-generate meta titles/descriptions + OG tags.
+
+6. Integrations
+
+Leads: Email + Webhook (Zapier, CRM, or internal endpoint).
+
+Analytics: Google Analytics + Search Console + Meta Pixel.
+
+Blog Auto-Share: RSS feed to LinkedIn/Facebook.
+
+Optional: Connect newsletter or Mailchimp.
+
+7. Design & UX
+
+Style: Clean, trustworthy design — blue/green/white color palette.
+
+UI: Modern cards, rounded corners, soft shadows, responsive layout.
+
+Performance: Optimized for Core Web Vitals (90+ on PageSpeed).
+
+Sticky CTA: “Get Exit Quote” visible on scroll.
+
+Accessibility: WCAG-compliant.
+
+Compliance: GDPR + CCPA cookie consent.
